@@ -10,6 +10,8 @@
 
 import { createSchema } from '../Schema'
 
+const assertStaticType = <T>(_: T) => {}
+
 it('returns a validator', () => {
   const Number = createSchema(
     (x: any): x is number => typeof x === 'number'
@@ -17,6 +19,10 @@ it('returns a validator', () => {
 
   expect(Number.test(42)).toBe(true)
   expect(Number.test('42')).toBe(false)
+
+  let x
+  // Check validator asserts static type
+  if (Number.test(x)) assertStaticType<number>(x)
 })
 
 it('can create union schema', () => {
