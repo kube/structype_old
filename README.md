@@ -1,8 +1,10 @@
+[![CircleCI](https://circleci.com/gh/kube/structype.svg?style=svg)](https://circleci.com/gh/kube/structype)
+
 <h1 align="center">
   <img width="310" alt="Structype" src="logo.svg">
 </h1>
 
-Schema/Type Validator. With static typing!
+<h3 align="center">Schema/Type Validator. With static typing!</h3>
 
 ## Install
 
