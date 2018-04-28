@@ -20,9 +20,11 @@ it('returns a validator', () => {
   expect(Number.test(42)).toBe(true)
   expect(Number.test('42')).toBe(false)
 
+  // Check static type inference
   let x
-  // Check validator asserts static type
-  if (Number.test(x)) assertStaticType<number>(x)
+  if (Number.test(x)) {
+    assertStaticType<number>(x)
+  }
 })
 
 it('can create union schema', () => {
@@ -37,6 +39,12 @@ it('can create union schema', () => {
   expect(FortyTwoOrOdd.test(42)).toBe(true)
   expect(FortyTwoOrOdd.test(43)).toBe(true)
   expect(FortyTwoOrOdd.test(44)).toBe(false)
+
+  // Check static type inference
+  let x
+  if (FortyTwoOrOdd.test(x)) {
+    assertStaticType<number>(x)
+  }
 })
 
 it('can create intersection schema', () => {
@@ -54,4 +62,10 @@ it('can create intersection schema', () => {
   expect(EvenPositiveNumber.test(0)).toBe(true)
   expect(EvenPositiveNumber.test(42)).toBe(true)
   expect(EvenPositiveNumber.test(43)).toBe(false)
+
+  // Check static type inference
+  let x
+  if (EvenPositiveNumber.test(x)) {
+    assertStaticType<number>(x)
+  }
 })
