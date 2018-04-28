@@ -11,12 +11,12 @@
 import { createSchema } from '../Schema'
 
 it('returns a validator', () => {
-  const NumberSchema = createSchema(
+  const Number = createSchema(
     (x: any): x is number => typeof x === 'number'
   )
 
-  expect(NumberSchema(42)).toBe(true)
-  expect(NumberSchema('42')).toBe(false)
+  expect(Number.test(42)).toBe(true)
+  expect(Number.test('42')).toBe(false)
 })
 
 it('can create union schema', () => {
@@ -24,13 +24,13 @@ it('can create union schema', () => {
   const OddNumber = createSchema(
     (x: any): x is number => typeof x === 'number' && x % 2 === 1
   )
-  const FortyTwoOrOddSchema = FortyTwo.or(OddNumber)
+  const FortyTwoOrOdd = FortyTwo.or(OddNumber)
 
-  expect(FortyTwoOrOddSchema(0)).toBe(false)
-  expect(FortyTwoOrOddSchema(1)).toBe(true)
-  expect(FortyTwoOrOddSchema(42)).toBe(true)
-  expect(FortyTwoOrOddSchema(43)).toBe(true)
-  expect(FortyTwoOrOddSchema(44)).toBe(false)
+  expect(FortyTwoOrOdd.test(0)).toBe(false)
+  expect(FortyTwoOrOdd.test(1)).toBe(true)
+  expect(FortyTwoOrOdd.test(42)).toBe(true)
+  expect(FortyTwoOrOdd.test(43)).toBe(true)
+  expect(FortyTwoOrOdd.test(44)).toBe(false)
 })
 
 it('can create intersection schema', () => {
@@ -43,9 +43,9 @@ it('can create intersection schema', () => {
 
   const EvenPositiveNumber = EvenNumber.and(PositiveNumber)
 
-  expect(EvenPositiveNumber(-43)).toBe(false)
-  expect(EvenPositiveNumber(-42)).toBe(false)
-  expect(EvenPositiveNumber(0)).toBe(true)
-  expect(EvenPositiveNumber(42)).toBe(true)
-  expect(EvenPositiveNumber(43)).toBe(false)
+  expect(EvenPositiveNumber.test(-43)).toBe(false)
+  expect(EvenPositiveNumber.test(-42)).toBe(false)
+  expect(EvenPositiveNumber.test(0)).toBe(true)
+  expect(EvenPositiveNumber.test(42)).toBe(true)
+  expect(EvenPositiveNumber.test(43)).toBe(false)
 })

@@ -8,23 +8,24 @@
      ## ## ## :##
       ## ## ##*/
 
-interface Schema<T> extends Function {
+interface Schema<T> {
   Type: T
-  (x: any): x is T
+  test: (x: any) => x is T
   or: <U>(schema: Schema<U>) => Schema<T | U>
   and: <U>(schema: Schema<U>) => Schema<T & U>
 }
 
 export const createSchema = <T>(
   test: (x: any) => x is T
-): Schema<T> => {
-  const schema: any = (x: any) => test(x)
+): Schema<T> => ({
+  // Type is not meant to be used at runtime
+  Type: null as any,
 
-  schema.or = <U>(schema2: Schema<U>): Schema<T | U> =>
-    createSchema((x: any): x is T | U => schema(x) || schema2(x))
+  test,
 
-  schema.and = <U>(schema2: Schema<U>): Schema<T & U> =>
-    createSchema((x: any): x is T & U => schema(x) && schema2(x))
+  or: <U>(schema2: Schema<U>): Schema<T | U> =>
+    createSchema((x: any): x is T | U => test(x) || schema2.test(x)),
 
-  return schema as any
-}
+  and: <U>(schema2: Schema<U>): Schema<T & U> =>
+    createSchema((x: any): x is T & U => test(x) && schema2.test(x))
+})
