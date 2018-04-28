@@ -1,4 +1,6 @@
-# Structype
+<h1 align="center">
+  <img width="310" alt="Structype" src="logo.svg">
+</h1>
 
 Schema/Type Validator. With static typing!
 
