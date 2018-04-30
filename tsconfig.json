@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
-    "module": "es2015",
-    "moduleResolution": "node",
+    "module": "commonjs",
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
