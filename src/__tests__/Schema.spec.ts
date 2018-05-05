@@ -9,8 +9,7 @@
       ## ## ##*/
 
 import { createSchema } from '../Schema'
-
-const assertStaticType = <T>(_: T) => {}
+import { StaticCheck, IsType } from './helpers'
 
 it('returns a validator', () => {
   const Number = createSchema(
@@ -21,10 +20,11 @@ it('returns a validator', () => {
   expect(Number.test('42')).toBe(false)
 
   // Check static type inference
-  let x
-  if (Number.test(x)) {
-    assertStaticType<number>(x)
-  }
+  !((x: any) => {
+    if (Number.test(x)) {
+      StaticCheck<IsType<number, typeof x>>()
+    }
+  })
 })
 
 it('can create union schema', () => {
@@ -41,10 +41,11 @@ it('can create union schema', () => {
   expect(FortyTwoOrOdd.test(44)).toBe(false)
 
   // Check static type inference
-  let x
-  if (FortyTwoOrOdd.test(x)) {
-    assertStaticType<number>(x)
-  }
+  !((x: any) => {
+    if (FortyTwoOrOdd.test(x)) {
+      StaticCheck<IsType<number, typeof x>>()
+    }
+  })
 })
 
 it('can create intersection schema', () => {
@@ -64,8 +65,9 @@ it('can create intersection schema', () => {
   expect(EvenPositiveNumber.test(43)).toBe(false)
 
   // Check static type inference
-  let x
-  if (EvenPositiveNumber.test(x)) {
-    assertStaticType<number>(x)
-  }
+  !((x: any) => {
+    if (EvenPositiveNumber.test(x)) {
+      StaticCheck<IsType<number, typeof x>>()
+    }
+  })
 })
