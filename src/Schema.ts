@@ -8,7 +8,7 @@
      ## ## ## :##
       ## ## ##*/
 
-interface Schema<T> {
+export type Schema<T> = {
   Type: T
   test: (x: any) => x is T
   or: <U>(schema: Schema<U>) => Schema<T | U>
