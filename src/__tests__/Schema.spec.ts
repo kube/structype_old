@@ -8,7 +8,7 @@
      ## ## ## :##
       ## ## ##*/
 
-import { createSchema } from '../Schema'
+import { createSchema, isSchema } from '../Schema'
 import { StaticCheck, IsType } from './helpers'
 
 it('returns a validator', () => {
@@ -25,6 +25,15 @@ it('returns a validator', () => {
       StaticCheck<IsType<number, typeof x>>()
     }
   })
+})
+
+it('is possible to detect a Schema at runtime', () => {
+  const Number = createSchema(
+    (x: any): x is number => typeof x === 'number'
+  )
+
+  expect(isSchema(Number)).toBe(true)
+  expect(isSchema({})).toBe(false)
 })
 
 it('can create union schema', () => {
