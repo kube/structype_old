@@ -8,11 +8,11 @@
      ## ## ## :##
       ## ## ##*/
 
-import { createSchema, isSchema } from '../Schema'
+import { createType, isType } from '../Type'
 import { StaticCheck, IsType } from './helpers'
 
 it('returns a validator', () => {
-  const Number = createSchema(
+  const Number = createType(
     (x: any): x is number => typeof x === 'number'
   )
 
@@ -27,18 +27,18 @@ it('returns a validator', () => {
   })
 })
 
-it('is possible to detect a Schema at runtime', () => {
-  const Number = createSchema(
+it('is possible to detect a Type at runtime', () => {
+  const Number = createType(
     (x: any): x is number => typeof x === 'number'
   )
 
-  expect(isSchema(Number)).toBe(true)
-  expect(isSchema({})).toBe(false)
+  expect(isType(Number)).toBe(true)
+  expect(isType({})).toBe(false)
 })
 
-it('can create union schema', () => {
-  const FortyTwo = createSchema((x: any): x is 42 => x === 42)
-  const OddNumber = createSchema(
+it('can create union Type', () => {
+  const FortyTwo = createType((x: any): x is 42 => x === 42)
+  const OddNumber = createType(
     (x: any): x is number => typeof x === 'number' && x % 2 === 1
   )
   const FortyTwoOrOdd = FortyTwo.or(OddNumber)
@@ -57,11 +57,11 @@ it('can create union schema', () => {
   })
 })
 
-it('can create intersection schema', () => {
-  const EvenNumber = createSchema(
+it('can create intersection Type', () => {
+  const EvenNumber = createType(
     (x: any): x is number => typeof x === 'number' && x % 2 === 0
   )
-  const PositiveNumber = createSchema(
+  const PositiveNumber = createType(
     (x: any): x is number => typeof x === 'number' && x >= 0
   )
 

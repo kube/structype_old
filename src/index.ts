@@ -8,5 +8,5 @@
      ## ## ## :##
       ## ## ##*/
 
-export * from './Schema'
-export * from './schemas'
+export * from './Type'
+export * from './types'

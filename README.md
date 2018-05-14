@@ -4,7 +4,7 @@
   <img width="310" alt="Structype" src="https://rawgithub.com/kube/structype/master/logo.svg">
 </h1>
 
-<h3 align="center">Schema/Type Validator. With static typing!</h3>
+<h3 align="center">Structural Type validation. Statically-typed.</h3>
 
 ## Install
 
@@ -15,16 +15,16 @@ yarn add structype
 ## Usage
 
 ```ts
-import { createSchema } from 'structype'
+import { createType } from 'structype'
 
-const PositiveNumber = createSchema(
+const PositiveNumber = createType(
   (x: any): x is number => typeof x === 'number' && x >= 0
 )
 
 PositiveNumber.test(42) // true
 PositiveNumber.test(-42) // false
 
-const EvenNumber = createSchema(
+const EvenNumber = createType(
   (x: any): x is number => typeof x === 'number' && x % 2 === 0
 )
 
