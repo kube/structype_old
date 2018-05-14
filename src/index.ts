@@ -9,4 +9,3 @@
       ## ## ##*/
 
 export * from './Type'
-export * from './types'
