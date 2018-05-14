@@ -1,6 +1,6 @@
 [![CircleCI](https://circleci.com/gh/kube/structype.svg?style=svg)](https://circleci.com/gh/kube/structype)
 
-<h1 align="center">
+<h1 style="text-align: center">
   <img width="310" alt="Structype" src="https://rawgithub.com/kube/structype/master/logo.svg">
 </h1>
 
