@@ -8,5 +8,4 @@
      ## ## ## :##
       ## ## ##*/
 
-export * from './Schema'
-export * from './schemas'
+export * from './Object'
