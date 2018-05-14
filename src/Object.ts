@@ -8,7 +8,7 @@
      ## ## ## :##
       ## ## ##*/
 
-import { Type, createType, isType } from '../Type'
+import { Type, createType, isType } from './Type'
 
 type ObjectTypeDescription = {
   [key: string]: Type<any> | ObjectTypeDescription

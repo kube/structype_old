@@ -8,9 +8,9 @@
      ## ## ## :##
       ## ## ##*/
 
-import { createType } from '../../Type'
-import { ObjectType } from '../../types/Object'
-import { StaticCheck, IsType } from '../helpers'
+import { createType } from '../Type'
+import { ObjectType } from '../Object'
+import { StaticCheck, IsType } from './helpers'
 
 const Number = createType(
   (x: any): x is number => typeof x === 'number'
