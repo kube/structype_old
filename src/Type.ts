@@ -30,7 +30,7 @@ const markAsType = (type: any) => {
 export const isType = (obj: any): obj is Type<any> =>
   obj[TYPE_IDENTIFIER] === true
 
-export const createType = <T>(test: (x: any) => x is T): Type<T> =>
+export const Type = <T>(test: (x: any) => x is T): Type<T> =>
   markAsType({
     // Type is not meant to be used at runtime
     Type: null as any,
@@ -38,8 +38,8 @@ export const createType = <T>(test: (x: any) => x is T): Type<T> =>
     test,
 
     or: <U>(type2: Type<U>): Type<T | U> =>
-      createType((x: any): x is T | U => test(x) || type2.test(x)),
+      Type((x: any): x is T | U => test(x) || type2.test(x)),
 
     and: <U>(type2: Type<U>): Type<T & U> =>
-      createType((x: any): x is T & U => test(x) && type2.test(x))
+      Type((x: any): x is T & U => test(x) && type2.test(x))
   })

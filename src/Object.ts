@@ -8,7 +8,7 @@
      ## ## ## :##
       ## ## ##*/
 
-import { Type, createType, isType } from './Type'
+import { Type, isType } from './Type'
 
 type ObjectTypeDescription = {
   [key: string]: Type<any> | ObjectTypeDescription
@@ -66,7 +66,7 @@ export const ObjectType = <
       : ObjectType(value as ObjectTypeDescription)
   }
 
-  return createType((x: any): x is T => {
+  return Type((x: any): x is T => {
     if (typeof x !== 'object') {
       return false
     }

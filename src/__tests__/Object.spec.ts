@@ -8,19 +8,15 @@
      ## ## ## :##
       ## ## ##*/
 
-import { createType } from '../Type'
+import { Type } from '../Type'
 import { ObjectType } from '../Object'
 import { StaticCheck, IsType } from './helpers'
 
-const Number = createType(
-  (x: any): x is number => typeof x === 'number'
-)
+const Number = Type((x: any): x is number => typeof x === 'number')
 
-const String = createType(
-  (x: any): x is string => typeof x === 'string'
-)
+const String = Type((x: any): x is string => typeof x === 'string')
 
-const PositiveNumber = createType(
+const PositiveNumber = Type(
   (x: any): x is number => Number.test(x) && x > 0
 )
 

@@ -8,13 +8,11 @@
      ## ## ## :##
       ## ## ##*/
 
-import { createType, isType } from '../Type'
+import { Type, isType } from '../Type'
 import { StaticCheck, IsType } from './helpers'
 
 it('returns a validator', () => {
-  const Number = createType(
-    (x: any): x is number => typeof x === 'number'
-  )
+  const Number = Type((x: any): x is number => typeof x === 'number')
 
   expect(Number.test(42)).toBe(true)
   expect(Number.test('42')).toBe(false)
@@ -28,17 +26,15 @@ it('returns a validator', () => {
 })
 
 it('is possible to detect a Type at runtime', () => {
-  const Number = createType(
-    (x: any): x is number => typeof x === 'number'
-  )
+  const Number = Type((x: any): x is number => typeof x === 'number')
 
   expect(isType(Number)).toBe(true)
   expect(isType({})).toBe(false)
 })
 
 it('can create union Type', () => {
-  const FortyTwo = createType((x: any): x is 42 => x === 42)
-  const OddNumber = createType(
+  const FortyTwo = Type((x: any): x is 42 => x === 42)
+  const OddNumber = Type(
     (x: any): x is number => typeof x === 'number' && x % 2 === 1
   )
   const FortyTwoOrOdd = FortyTwo.or(OddNumber)
@@ -58,10 +54,10 @@ it('can create union Type', () => {
 })
 
 it('can create intersection Type', () => {
-  const EvenNumber = createType(
+  const EvenNumber = Type(
     (x: any): x is number => typeof x === 'number' && x % 2 === 0
   )
-  const PositiveNumber = createType(
+  const PositiveNumber = Type(
     (x: any): x is number => typeof x === 'number' && x >= 0
   )
 
