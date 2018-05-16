@@ -15,38 +15,23 @@ yarn add structype
 ## Usage
 
 ```ts
-import { createType } from 'structype'
+import { SchemaType, types } from 'structype'
 
-const PositiveNumber = createType(
-  (x: any): x is number => typeof x === 'number' && x >= 0
-)
-
-PositiveNumber.test(42) // true
-PositiveNumber.test(-42) // false
-
-const EvenNumber = createType(
-  (x: any): x is number => typeof x === 'number' && x % 2 === 0
-)
-
-EvenNumber.test(-42) // true
-EvenNumber.test(43) // false
-
-// Intersection type
-const EvenPositiveNumber = PositiveNumber.and(EvenNumber)
-
-EvenPositiveNumber.test(-42) // false
-EvenPositiveNumber.test(43) // false
-EvenPositiveNumber.test(42) // true
+const Person = SchemaType({
+  firstName: String,
+  lastName: String,
+  age: Number
+})
 ```
 
 ## Static Type Inference
 
 ```ts
-function handleInput(x: any) {
-  if (EvenPositiveNumber.test(x)) {
-    x // x is a number
+function handleInput(obj: any) {
+  if (Person.test(obj)) {
+    obj // x is a Person
   } else {
-    x // x is still any
+    obj // x is still any
   }
 }
 ```

@@ -8,20 +8,18 @@
      ## ## ## :##
       ## ## ##*/
 
-import { Type } from '../Type'
-import { ObjectType } from '../Object'
-import { StaticCheck, IsType } from './helpers'
+import { createType } from '../createType'
+import { SchemaType } from '../SchemaType'
+import { StaticCheck, IsType } from './__helpers'
 
-const Number = Type((x: any): x is number => typeof x === 'number')
+import { Number, String } from '../Primitives'
 
-const String = Type((x: any): x is string => typeof x === 'string')
-
-const PositiveNumber = Type(
+const PositiveNumber = createType(
   (x: any): x is number => Number.test(x) && x > 0
 )
 
 it('returns a correct validator', () => {
-  const Person = ObjectType({
+  const Person = SchemaType({
     firstName: String,
     lastName: String,
     age: PositiveNumber
@@ -35,7 +33,7 @@ it('returns a correct validator', () => {
         lastName: string
         age: number
       },
-      typeof Person.Type
+      typeof Person.type
     >
   >()
 
