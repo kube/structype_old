@@ -1,4 +1,7 @@
 /.circleci
 /lib/__tests__
 /src
-/jest.config.jest
+.editorconfig
+.prettierrc
+jest.config.js
+tsconfig.json
