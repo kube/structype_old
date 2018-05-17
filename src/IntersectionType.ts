@@ -19,9 +19,9 @@ export const IntersectionType = <A, B>(
     return typeA.test(x) && typeB.test(x)
   })
 
-type IntersectionableType<T extends Type<any>> = T extends Type<
-  infer A
->
+export type IntersectionableType<
+  T extends Type<any>
+> = T extends Type<infer A>
   ? T & { and: <B>(_: Type<B>) => Type<A & B> }
   : never
 

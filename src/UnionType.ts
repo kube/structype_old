@@ -16,7 +16,9 @@ export const UnionType = <A, B>(typeA: Type<A>, typeB: Type<B>) =>
     return typeA.test(x) || typeB.test(x)
   })
 
-type UnionableType<T extends Type<any>> = T extends Type<infer A>
+export type UnionableType<T extends Type<any>> = T extends Type<
+  infer A
+>
   ? T & { or: <B>(_: Type<B>) => Type<A | B> }
   : never
 
