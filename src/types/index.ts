@@ -16,7 +16,6 @@ export const TYPE_IDENTIFIER = '__StructypeType__'
 export const RUNTIME_STATIC_TYPE_VALUE = null as any
 
 export type Type<T> = {
-  [TYPE_IDENTIFIER]: true
   /**
    * Static Type associated to Type object.
    * Not meant to be used at runtime.

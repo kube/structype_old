@@ -6,6 +6,6 @@
     "noUnusedParameters": true,
     "rootDir": "src",
     "outDir": "lib",
-    "experimentalDecorators": true
+    "declaration": true
   }
 }
