@@ -27,6 +27,17 @@ it('validates only passed literal', () => {
   expect(FortyTwo.test(42)).toBe(true)
   expect(FortyTwo.test(43)).toBe(false)
   expect(FortyTwo.test('42')).toBe(false)
+
+  const True = LiteralType(true)
+  type True = typeof True.type
+
+  StaticCheck<IsSameStaticType<true, True>>()
+
+  expect(True.test(true)).toBe(true)
+  expect(True.test(false)).toBe(false)
+  expect(True.test(0)).toBe(false)
+  expect(True.test(1)).toBe(false)
+  expect(True.test(null)).toBe(false)
 })
 
 it('allows unions', () => {
