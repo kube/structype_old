@@ -8,9 +8,9 @@
      ## ## ## :##
       ## ## ##*/
 
-export type IsSubtype<T, S> = S extends T ? true : false
+export type IsSubStaticType<T, S> = S extends T ? true : false
 
-export type IsType<T, S> = S extends T
+export type IsSameStaticType<T, S> = S extends T
   ? (T extends S ? true : false)
   : false
 

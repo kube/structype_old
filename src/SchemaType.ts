@@ -10,7 +10,7 @@
 
 import { Type } from './types'
 import { isType } from './isType'
-import { createType } from './createType'
+import { RawType } from './RawType'
 
 export type SchemaDescription = {
   [key: string]: Type<any> | SchemaDescription
@@ -19,23 +19,57 @@ export type SchemaDescription = {
 /**
  * Get expected static type from a SchemaDescription.
  */
-type TypeFromSchemaDescription<D extends SchemaDescription> = {
+export type StaticTypeFromSchemaDescription<
+  D extends SchemaDescription
+> = {
   [K in keyof D]: D[K] extends Type<infer T>
     ? T
     : D[K] extends SchemaDescription
-      ? TypeFromSchemaDescription<D[K]>
+      ? StaticTypeFromSchemaDescription_<D[K]>
+      : never
+}
+
+// Copied to force evaluation of recursive type,
+// and see associated static type in a depth of 4
+export type StaticTypeFromSchemaDescription_<
+  D extends SchemaDescription
+> = {
+  [K in keyof D]: D[K] extends Type<infer T>
+    ? T
+    : D[K] extends SchemaDescription
+      ? StaticTypeFromSchemaDescription__<D[K]>
+      : never
+}
+
+export type StaticTypeFromSchemaDescription__<
+  D extends SchemaDescription
+> = {
+  [K in keyof D]: D[K] extends Type<infer T>
+    ? T
+    : D[K] extends SchemaDescription
+      ? StaticTypeFromSchemaDescription___<D[K]>
+      : never
+}
+
+export type StaticTypeFromSchemaDescription___<
+  D extends SchemaDescription
+> = {
+  [K in keyof D]: D[K] extends Type<infer T>
+    ? T
+    : D[K] extends SchemaDescription
+      ? StaticTypeFromSchemaDescription<D[K]>
       : never
 }
 
 /**
- * Create an Object Type from an object description.
+ * Create a Type from an Object Description.
  */
 export const SchemaType = <
   D extends SchemaDescription,
-  T extends TypeFromSchemaDescription<D>
+  T extends StaticTypeFromSchemaDescription<D>
 >(
   schemaDescription: D
-): Type<T> => {
+) => {
   // Record containing all key/Type couples
   const schemaRecord: { [key: string]: Type<any> } = {}
 
@@ -47,12 +81,12 @@ export const SchemaType = <
     schemaRecord[key] = isType(value) ? value : SchemaType(value)
   }
 
-  return createType((x: any): x is T => {
+  return RawType((x: any): x is T => {
     if (typeof x !== 'object') {
       return false
     }
 
-    // Simply check that all sub-schemas match in the input object
+    // Simply check that all nested types match in the input object
     for (const key in schemaRecord) {
       if (!schemaRecord[key].test(x[key])) {
         return false

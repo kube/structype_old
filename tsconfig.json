@@ -5,6 +5,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "rootDir": "src",
-    "outDir": "lib"
+    "outDir": "lib",
+    "experimentalDecorators": true
   }
 }

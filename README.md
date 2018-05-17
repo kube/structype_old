@@ -15,13 +15,15 @@ yarn add structype
 ## Usage
 
 ```ts
-import { SchemaType, types } from 'structype'
+import { Type, String, Number } from 'structype'
 
-const Person = SchemaType({
+export const Person = Type({
   firstName: String,
   lastName: String,
   age: Number
 })
+
+export type Person = typeof Person.type
 ```
 
 ## Static Type Inference

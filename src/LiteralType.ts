@@ -8,12 +8,13 @@
      ## ## ## :##
       ## ## ##*/
 
-import { Type } from './types'
-import { createType } from './createType'
+import { RawType } from './RawType'
+import { Primitive } from './Primitives'
 
-export const LiteralType = <T extends string | number | boolean>(
-  literal: T
-): Type<T> =>
-  createType((x: any): x is T => {
+/**
+ * Create a Type for a specific Literal
+ */
+export const LiteralType = <T extends Primitive>(literal: T) =>
+  RawType((x: any): x is T => {
     return x === literal
   })
