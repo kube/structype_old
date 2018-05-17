@@ -6,6 +6,12 @@
 
 <h3 align="center">Structural Type validation. Statically-typed.</h3>
 
+<p align="center">
+  <img
+    width="670"
+    src="https://user-images.githubusercontent.com/2991143/40195463-cd727238-5a0d-11e8-8fcd-1c72b546199e.gif" />
+</p>
+
 ## Install
 
 ```sh
