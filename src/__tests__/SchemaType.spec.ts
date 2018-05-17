@@ -8,16 +8,16 @@
      ## ## ## :##
       ## ## ##*/
 
-import { RawType } from '../RawType'
-import { SchemaType } from '../SchemaType'
 import {
   StaticCheck,
   IsSameStaticType,
   IsSubStaticType
 } from './__helpers'
 
+import { RawType } from '../RawType'
+import { SchemaType } from '../SchemaType'
 import { Number, String, Undefined } from '../Primitives'
-import { LiteralType } from '..'
+import { LiteralType } from '../LiteralType'
 import { UnionType } from '../UnionType'
 
 const PositiveNumber = RawType(

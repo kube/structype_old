@@ -9,6 +9,7 @@
       ## ## ##*/
 
 import { StaticCheck, IsSameStaticType } from './__helpers'
+
 import { RawType } from '..'
 import { isType } from '../isType'
 
