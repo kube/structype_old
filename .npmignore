@@ -1,0 +1,4 @@
+/.circleci
+/lib/__tests__
+/src
+/jest.config.jest
