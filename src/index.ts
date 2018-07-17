@@ -14,5 +14,6 @@ export * from './LiteralType'
 export * from './SchemaType'
 export * from './GenericType'
 
-// Create alias of GenericType for conciseness in usage
-export { GenericType as Type } from './GenericType'
+// Export GenericType as default for conciseness in usage
+import { GenericType } from './GenericType'
+export default GenericType
