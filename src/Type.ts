@@ -138,28 +138,28 @@ export type UnionType<
 >
 
 export function UnionType<P1 extends TypeProps, P2 extends TypeProps>(
-  typeProps1: P1,
-  typeProps2: P2
+  leftTypeProps: P1,
+  rightTypeProps: P2
 ): UnionType<P1, P2>
 
 export function UnionType(
-  typeProps1: TypeProps,
-  typeProps2: TypeProps
+  leftTypeProps: TypeProps,
+  rightTypeProps: TypeProps
 ): UnionType {
   // Create Types from typeProps
-  const type1 = Type(typeProps1)
-  const type2 = Type(typeProps2)
+  const leftType = Type(leftTypeProps)
+  const rightType = Type(rightTypeProps)
 
-  type ResultType = typeof type1.type | typeof type2.type
+  type ResultType = typeof leftType.type | typeof rightType.type
 
   return GenericType(
     'union',
     {
-      left: type1,
-      right: type2
+      left: leftType,
+      right: rightType
     },
     (x: any): x is ResultType => {
-      return type1.test(x) || type2.test(x)
+      return leftType.test(x) || rightType.test(x)
     }
   )
 }
