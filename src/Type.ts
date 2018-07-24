@@ -15,21 +15,21 @@ const STRUCTYPE_FLAG = '__STRUCTYPE__'
  */
 export type GenericType<K extends string, T, P> = {
   [STRUCTYPE_FLAG]: true
-  Type: T
+  type: T
   kind: K
+  // TODO: Rename props to something else
+  // to avoid ambiguity with TypeProps
   props: P
   test: (x: any) => x is T
 }
 
-export const AbstractType = <K extends string, T, P>(
+export const GenericType = <K extends string, T, P>(
   kind: K,
   props: P,
   test: (x: any) => x is T
 ): GenericType<K, T, P> => ({
-  // Flag object as Structype for simple recognition
   [STRUCTYPE_FLAG]: true,
-  // Type is not meant to be used at runtime
-  Type: (null as any) as T,
+  type: (null as any) as T,
   kind,
   props,
   test
@@ -37,9 +37,14 @@ export const AbstractType = <K extends string, T, P>(
 
 /**
  * Blackbox Type Creator.
+ *
+ * A Black Type is a Type for which we cannot really assert
+ * the static type.
+ *
+ * e.g. Integer, Positive, Odd numbers, etc...
  */
 export const BlackType = <T>(test: (x: any) => x is T) =>
-  AbstractType('black', null, test)
+  GenericType('black', null, test)
 
 /**
  * Primitive.
@@ -59,7 +64,7 @@ type LiteralType<L extends Primitive> = GenericType<'literal', L, L>
 export const LiteralType = <L extends Primitive>(
   literal: L
 ): LiteralType<L> =>
-  AbstractType(
+  GenericType(
     'literal',
     literal,
     (x: any): x is L => {
@@ -73,7 +78,7 @@ export const LiteralType = <L extends Primitive>(
 type RegexType = GenericType<'regex', string, RegExp>
 
 export const RegexType = (regex: RegExp): RegexType =>
-  AbstractType(
+  GenericType(
     'regex',
     regex,
     (x: any): x is string => {
@@ -87,7 +92,7 @@ export const RegexType = (regex: RegExp): RegexType =>
 type TypeProps = Type | Primitive | RegExp
 
 /**
- * Type From TypeProps
+ * Type From TypeProps.
  */
 export type TypeFromTypeProps<P extends TypeProps> = P extends Type
   ? P
@@ -103,10 +108,12 @@ export type Type = LiteralType<Primitive> | RegexType
 export const isType = (x: any): x is Type =>
   typeof x === 'object' && x[STRUCTYPE_FLAG] === true
 
-export function Type<P extends TypeProps>(props: P): TypeFromTypeProps<P>
-export function Type(x: TypeProps) {
+export function Type<P extends TypeProps>(
+  props: P
+): TypeFromTypeProps<P>
+
+export function Type(x: TypeProps): Type {
   if (isType(x)) {
-    x
     return x
   } else if (isPrimitive(x)) {
     return LiteralType(x)
@@ -118,22 +125,41 @@ export function Type(x: TypeProps) {
 /**
  * Union Type.
  */
-export const UnionType = <P1 extends TypeProps, P2 extends TypeProps>(
+export type UnionType<
+  P1 extends TypeProps = TypeProps,
+  P2 extends TypeProps = TypeProps
+> = GenericType<
+  'union',
+  TypeFromTypeProps<P1>['type'] | TypeFromTypeProps<P2>['type'],
+  {
+    left: TypeFromTypeProps<P1>
+    right: TypeFromTypeProps<P2>
+  }
+>
+
+export function UnionType<P1 extends TypeProps, P2 extends TypeProps>(
   typeProps1: P1,
   typeProps2: P2
-): Type => {
+): UnionType<P1, P2>
+
+export function UnionType(
+  typeProps1: TypeProps,
+  typeProps2: TypeProps
+): UnionType {
   // Create Types from typeProps
   const type1 = Type(typeProps1)
   const type2 = Type(typeProps2)
 
-  type T1 = typeof type1.Type
-  type T2 = typeof type2.Type
+  type ResultType = typeof type1.type | typeof type2.type
 
-  return AbstractType(
+  return GenericType(
     'union',
-    [type1, type2],
-    (x: any): x is T1 | T2 => {
-      return type1.test(x) || type2.test
+    {
+      left: type1,
+      right: type2
+    },
+    (x: any): x is ResultType => {
+      return type1.test(x) || type2.test(x)
     }
   )
 }
