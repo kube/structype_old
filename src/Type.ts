@@ -146,7 +146,7 @@ export function UnionType(
   leftTypeProps: TypeProps,
   rightTypeProps: TypeProps
 ): UnionType {
-  // Create Types from typeProps
+  // Create Types from TypeProps
   const leftType = Type(leftTypeProps)
   const rightType = Type(rightTypeProps)
 
