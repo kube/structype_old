@@ -40,5 +40,10 @@ describe('LiteralType', () => {
     type ThirteenOrFortyTwo = typeof ThirteenOrFortyTwo.type
 
     StaticCheck<IsSameStaticType<ExpectedType, ThirteenOrFortyTwo>>()
+
+    expect(ThirteenOrFortyTwo.test(13)).toBe(true)
+    expect(ThirteenOrFortyTwo.test(42)).toBe(true)
+    expect(ThirteenOrFortyTwo.test(43)).toBe(false)
+    expect(ThirteenOrFortyTwo.test(-13)).toBe(false)
   })
 })

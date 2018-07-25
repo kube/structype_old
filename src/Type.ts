@@ -87,9 +87,45 @@ export const RegexType = (regex: RegExp): RegexType =>
   )
 
 /**
+ * Object Type Creator.
+ */
+type ObjectType = GenericType<
+  'object',
+  {},
+  {
+    [key: string]: Type
+  }
+>
+
+type ObjectDescription = {
+  [key: string]: TypeProps
+}
+
+export function ObjectType(description: ObjectDescription): ObjectType
+
+export function ObjectType(description: ObjectDescription): ObjectType {
+  const props: { [key: string]: Type } = {}
+
+  for (const key in description) {
+    props[key] = Type(description[key])
+  }
+
+  const test = (x: { [key: string]: any }): x is any => {
+    for (const key in props) {
+      if (!props[key].test(x[key])) {
+        return false
+      }
+    }
+    return true
+  }
+
+  return GenericType('object', props, test)
+}
+
+/**
  * TypeProps
  */
-type TypeProps = Type | Primitive | RegExp
+type TypeProps = Type | Primitive | RegExp | ObjectDescription
 
 /**
  * Type From TypeProps.
@@ -98,15 +134,17 @@ export type TypeFromTypeProps<P extends TypeProps> = P extends Type
   ? P
   : P extends Primitive
     ? LiteralType<P>
-    : P extends RegExp ? RegexType : never
+    : P extends RegExp
+      ? RegexType
+      : P extends ObjectDescription ? ObjectType : never
 
 /**
  * Type Creator.
  */
-export type Type = LiteralType<Primitive> | RegexType
+export type Type = LiteralType<Primitive> | RegexType | ObjectType
 
 export const isType = (x: any): x is Type =>
-  typeof x === 'object' && x[STRUCTYPE_FLAG] === true
+  x && x[STRUCTYPE_FLAG] === true
 
 export function Type<P extends TypeProps>(
   props: P
@@ -117,13 +155,15 @@ export function Type(x: TypeProps): Type {
     return x
   } else if (isPrimitive(x)) {
     return LiteralType(x)
-  } else {
+  } else if (x instanceof RegExp) {
     return RegexType(x)
+  } else {
+    return ObjectType(x)
   }
 }
 
 /**
- * Union Type.
+ * Union Type Creator.
  */
 export type UnionType<
   P1 extends TypeProps = TypeProps,
