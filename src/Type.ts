@@ -10,10 +10,12 @@
 
 const STRUCTYPE_FLAG = '__STRUCTYPE__'
 
+export type StaticType = Primitive | { [key: string]: StaticType }
+
 /**
  * Generic Type Creator.
  */
-export type GenericType<K extends string, T, P> = {
+export type GenericType<K extends string, T extends StaticType, P> = {
   [STRUCTYPE_FLAG]: true
   type: T
   kind: K
@@ -23,7 +25,11 @@ export type GenericType<K extends string, T, P> = {
   test: (x: any) => x is T
 }
 
-export const GenericType = <K extends string, T, P>(
+export const GenericType = <
+  K extends string,
+  T extends StaticType,
+  P
+>(
   kind: K,
   props: P,
   test: (x: any) => x is T
@@ -43,7 +49,7 @@ export const GenericType = <K extends string, T, P>(
  *
  * e.g. Integer, Positive, Odd numbers, etc...
  */
-export const BlackType = <T>(test: (x: any) => x is T) =>
+export const BlackType = <T extends StaticType>(test: (x: any) => x is T) =>
   GenericType('black', null, test)
 
 /**
@@ -89,21 +95,24 @@ export const RegexType = (regex: RegExp): RegexType =>
 /**
  * Object Type Creator.
  */
-type ObjectType = GenericType<
-  'object',
-  {},
-  {
-    [key: string]: Type
-  }
->
-
 type ObjectDescription = {
   [key: string]: TypeProps
 }
 
-export function ObjectType(description: ObjectDescription): ObjectType
+interface ObjectType<D extends ObjectDescription>
+  extends GenericType<
+      'object',
+      StaticTypeFromTypeProps<D>,
+      { [key: string]: Type }
+    > {}
 
-export function ObjectType(description: ObjectDescription): ObjectType {
+export function ObjectType<D extends ObjectDescription>(
+  description: D
+): ObjectType<D>
+
+export function ObjectType(
+  description: ObjectDescription
+): ObjectType<any> {
   const props: { [key: string]: Type } = {}
 
   for (const key in description) {
@@ -136,12 +145,33 @@ export type TypeFromTypeProps<P extends TypeProps> = P extends Type
     ? LiteralType<P>
     : P extends RegExp
       ? RegexType
-      : P extends ObjectDescription ? ObjectType : never
+      : P extends ObjectDescription
+        ? ObjectType<StaticTypeFromObjectDescription<P>>
+        : never
+
+export type StaticTypeFromObjectDescription<
+  P extends ObjectDescription
+> = { [K in keyof P]: StaticTypeFromTypeProps<P[K]> }
+
+export type StaticTypeFromTypeProps<
+  P extends TypeProps
+> = P extends GenericType<any, infer T, any>
+  ? T
+  : P extends Primitive
+    ? P
+    : P extends RegExp
+      ? string
+      : P extends ObjectDescription
+        ? StaticTypeFromObjectDescription<P>
+        : never
 
 /**
  * Type Creator.
  */
-export type Type = LiteralType<Primitive> | RegexType | ObjectType
+export type Type =
+  | LiteralType<Primitive>
+  | RegexType
+  | ObjectType<any>
 
 export const isType = (x: any): x is Type =>
   x && x[STRUCTYPE_FLAG] === true

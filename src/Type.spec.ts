@@ -9,7 +9,7 @@
       ## ## ##*/
 
 import 'jest'
-import { Type, UnionType } from './Type'
+import { Type, UnionType, StaticTypeFromTypeProps } from './Type'
 import { StaticCheck, IsSameStaticType } from './__helpers'
 
 describe('RegexType', () => {
@@ -45,5 +45,37 @@ describe('LiteralType', () => {
     expect(ThirteenOrFortyTwo.test(42)).toBe(true)
     expect(ThirteenOrFortyTwo.test(43)).toBe(false)
     expect(ThirteenOrFortyTwo.test(-13)).toBe(false)
+  })
+})
+
+describe('TypeFromTypeProps', () => {
+  it('works for literal', () => {
+    type FortyTwo = StaticTypeFromTypeProps<42>
+    type ExpectedType = 42
+    StaticCheck<IsSameStaticType<ExpectedType, FortyTwo>>()
+  })
+
+  it('works for objects', () => {
+    type Animal = StaticTypeFromTypeProps<{ age: number }>
+    type ExpectedType = { age: number }
+
+    StaticCheck<IsSameStaticType<ExpectedType, Animal>>()
+  })
+})
+
+describe('ObjectType', () => {
+  it('works', () => {
+    const Animal = Type({
+      age: Type(42),
+      name: Type('Hello')
+    })
+    type Animal = typeof Animal.type
+    type ExpectedType = { age: 42, name: 'Hello' }
+
+    StaticCheck<IsSameStaticType<ExpectedType, Animal>>()
+
+    expect(Animal.test({ age: 42, name: 'Hello' })).toBe(true)
+    expect(Animal.test({ age: 42 })).toBe(false)
+    expect(Animal.test({ age: 13, name: 'Hello' })).toBe(false)
   })
 })
