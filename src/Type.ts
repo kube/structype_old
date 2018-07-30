@@ -55,12 +55,12 @@ export const BlackType = <T extends StaticType>(test: (x: any) => x is T) =>
 /**
  * Primitive.
  */
-type Primitive = string | boolean | number
+type Primitive = string | number | boolean
 
 const isPrimitive = (x: any): x is Primitive =>
   typeof x === 'string' ||
-  typeof x === 'boolean' ||
-  typeof x === 'number'
+  typeof x === 'number' ||
+  typeof x === 'boolean'
 
 /**
  * Literal Type Creator.
@@ -200,7 +200,7 @@ export type UnionType<
   P2 extends TypeProps = TypeProps
 > = GenericType<
   'union',
-  TypeFromTypeProps<P1>['type'] | TypeFromTypeProps<P2>['type'],
+  StaticTypeFromTypeProps<P1> | StaticTypeFromTypeProps<P2>,
   {
     left: TypeFromTypeProps<P1>
     right: TypeFromTypeProps<P2>
@@ -210,17 +210,10 @@ export type UnionType<
 export function UnionType<P1 extends TypeProps, P2 extends TypeProps>(
   leftTypeProps: P1,
   rightTypeProps: P2
-): UnionType<P1, P2>
-
-export function UnionType(
-  leftTypeProps: TypeProps,
-  rightTypeProps: TypeProps
-): UnionType {
+): UnionType<P1, P2> {
   // Create Types from TypeProps
   const leftType = Type(leftTypeProps)
   const rightType = Type(rightTypeProps)
-
-  type ResultType = typeof leftType.type | typeof rightType.type
 
   return GenericType(
     'union',
@@ -228,7 +221,7 @@ export function UnionType(
       left: leftType,
       right: rightType
     },
-    (x: any): x is ResultType => {
+    (x: any): x is any => {
       return leftType.test(x) || rightType.test(x)
     }
   )

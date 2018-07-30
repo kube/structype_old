@@ -34,7 +34,7 @@ describe('LiteralType', () => {
     expect(FortyTwo.test(42)).toBe(true)
   })
 
-  it('still works', () => {
+  it('still works with unions', () => {
     const ThirteenOrFortyTwo = UnionType(13, 42)
     type ExpectedType = 13 | 42
     type ThirteenOrFortyTwo = typeof ThirteenOrFortyTwo.type
