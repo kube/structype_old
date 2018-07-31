@@ -49,8 +49,9 @@ export const GenericType = <
  *
  * e.g. Integer, Positive, Odd numbers, etc...
  */
-export const BlackType = <T extends StaticType>(test: (x: any) => x is T) =>
-  GenericType('black', null, test)
+export const BlackType = <T extends StaticType>(
+  test: (x: any) => x is T
+) => GenericType('black', null, test)
 
 /**
  * Primitive.
@@ -169,9 +170,11 @@ export type StaticTypeFromTypeProps<
  * Type Creator.
  */
 export type Type =
+  // `any` is used to prevent circular references, as `TypeProps` references `Type`
   | LiteralType<Primitive>
   | RegexType
   | ObjectType<any>
+  | UnionType<any, any>
 
 export const isType = (x: any): x is Type =>
   x && x[STRUCTYPE_FLAG] === true
@@ -195,17 +198,18 @@ export function Type(x: TypeProps): Type {
 /**
  * Union Type Creator.
  */
-export type UnionType<
-  P1 extends TypeProps = TypeProps,
-  P2 extends TypeProps = TypeProps
-> = GenericType<
-  'union',
-  StaticTypeFromTypeProps<P1> | StaticTypeFromTypeProps<P2>,
-  {
-    left: TypeFromTypeProps<P1>
-    right: TypeFromTypeProps<P2>
-  }
+export interface UnionType<
+  P1 extends TypeProps,
+  P2 extends TypeProps
 >
+  extends GenericType<
+      'union',
+      StaticTypeFromTypeProps<P1> | StaticTypeFromTypeProps<P2>,
+      {
+        left: TypeFromTypeProps<P1>
+        right: TypeFromTypeProps<P2>
+      }
+    > {}
 
 export function UnionType<P1 extends TypeProps, P2 extends TypeProps>(
   leftTypeProps: P1,
@@ -226,3 +230,19 @@ export function UnionType<P1 extends TypeProps, P2 extends TypeProps>(
     }
   )
 }
+
+/**
+ * Intersection Type Creator.
+ */
+export interface IntersectionType<
+  P1 extends TypeProps,
+  P2 extends TypeProps
+>
+  extends GenericType<
+      'intersection',
+      StaticTypeFromTypeProps<P1> & StaticTypeFromTypeProps<P2>,
+      {
+        left: TypeFromTypeProps<P1>
+        right: TypeFromTypeProps<P2>
+      }
+    > {}
