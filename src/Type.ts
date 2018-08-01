@@ -183,6 +183,16 @@ export function Type<P extends TypeProps>(
   props: P
 ): TypeFromTypeProps<P>
 
+
+///<TEST>
+
+declare function TestType <P extends any>(p: P): P
+
+const Paco = TestType({ firstName: 'Paco', lastName: 'de Lucia' })
+
+//</TEST>
+
+
 export function Type(x: TypeProps): Type {
   if (isType(x)) {
     return x

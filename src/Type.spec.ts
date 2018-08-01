@@ -9,101 +9,61 @@
       ## ## ##*/
 
 import 'jest'
-import { Type, UnionType, StaticTypeFromTypeProps } from './Type'
-import { StaticCheck, IsSameStaticType } from './__helpers'
+import { StaticCheck, IsSameStaticType } from './__helpers';
+import { TypeFromTypeProps, Type } from './Type';
 
-//
-// DYNAMIC
-//
-describe('RegexType', () => {
-  it('works', () => {
-    const PhoneNumber = Type(/([0-9]{2}-?){5}/)
-
-    StaticCheck<IsSameStaticType<string, typeof PhoneNumber.type>>()
-
-    expect(PhoneNumber.test('06-25-97-07-71')).toBe(true)
-    expect(PhoneNumber.test('06-25-97-07-71-')).toBe(true)
-  })
-})
-
-describe('LiteralType', () => {
-  it('works', () => {
-    const FortyTwo = Type(42)
-    type FortyTwo = typeof FortyTwo.type
-    type ExpectedType = 42
-
-    StaticCheck<IsSameStaticType<FortyTwo, ExpectedType>>()
-
-    expect(FortyTwo.test(42)).toBe(true)
-  })
-
-  it('still works with unions', () => {
-    const ThirteenOrFortyTwo = UnionType(13, 42)
-    type ExpectedType = 13 | 42
-    type ThirteenOrFortyTwo = typeof ThirteenOrFortyTwo.type
-
-    StaticCheck<IsSameStaticType<ExpectedType, ThirteenOrFortyTwo>>()
-
-    expect(ThirteenOrFortyTwo.test(13)).toBe(true)
-    expect(ThirteenOrFortyTwo.test(42)).toBe(true)
-    expect(ThirteenOrFortyTwo.test(43)).toBe(false)
-    expect(ThirteenOrFortyTwo.test(-13)).toBe(false)
-  })
-})
-
-//
-// STATIC ONLY
-//
+// Static-only checks
 describe('TypeFromTypeProps', () => {
-  it('works for literal', () => {
-    type FortyTwo = StaticTypeFromTypeProps<42>
-    type ExpectedType = 42
-    StaticCheck<IsSameStaticType<ExpectedType, FortyTwo>>()
+  it('handles string literal', () => {
+    type Hello = TypeFromTypeProps<'Hello'>
+    StaticCheck<IsSameStaticType<Hello['kind'], 'literal'>>()
+    StaticCheck<IsSameStaticType<Hello['type'], 'Hello'>>()
   })
 
-  it('works for objects', () => {
-    type Animal = StaticTypeFromTypeProps<{ age: number }>
-    type ExpectedType = { age: number }
-
-    StaticCheck<IsSameStaticType<ExpectedType, Animal>>()
+  it('handles number literal', () => {
+    type FortyTwo = TypeFromTypeProps<42>
+    StaticCheck<IsSameStaticType<FortyTwo['kind'], 'literal'>>()
+    StaticCheck<IsSameStaticType<FortyTwo['type'], 42>>()
   })
-})
 
-//
-// DYNAMIC
-//
-describe('ObjectType', () => {
-  it('works', () => {
-    const Animal = Type({
-      age: Type(42),
-      name: Type('Hello')
-    })
-    type Animal = typeof Animal.type
-    type ExpectedType = { age: 42; name: 'Hello' }
+  it('handles boolean literal', () => {
+    type True = TypeFromTypeProps<true>
+    StaticCheck<IsSameStaticType<True['kind'], 'literal'>>()
+    StaticCheck<IsSameStaticType<True['type'], true>>()
 
-    StaticCheck<IsSameStaticType<ExpectedType, Animal>>()
-
-    expect(Animal.test({ age: 42, name: 'Hello' })).toBe(true)
-    expect(Animal.test({ age: 42 })).toBe(false)
-    expect(Animal.test({ age: 13, name: 'Hello' })).toBe(false)
+    type False = TypeFromTypeProps<false>
+    StaticCheck<IsSameStaticType<False['kind'], 'literal'>>()
+    StaticCheck<IsSameStaticType<False['type'], false>>()
   })
-})
 
-describe('Static', () => {
-  describe('StaticTypeFromTypeProps', () => {})
-  describe('TypeFromTypeProps', () => {})
+  it('handles object description', () => {
+    type Animal = TypeFromTypeProps<{ age: number, color: string }>
+    type Expected = { age: number, color: string }
+
+    StaticCheck<IsSameStaticType<Animal['kind'], 'object'>>()
+    StaticCheck<IsSameStaticType<Animal['type'], Expected>>()
+  })
 })
 
 describe('RegexType', () => {})
 
-describe('LiteralType', () => {})
+describe('LiteralType', () => {
+  it('returns a literal kind', () => {
+    const FortyTwo = Type(42)
+    expect(FortyTwo.kind).toBe('literal')
+  })
+})
 
-describe('ObjectType', () => {})
+describe('ObjectType', () => {
+  it('returns an object kind', () => {
+    const Paco = Type({ firstName: Type('Paco'), lastName: 'de Lucia' })
+    // type Paco = typeof Paco.type
+    // expect(Paco.kind).toBe('object')
+  })
+})
 
 describe('UnionType', () => {})
 
 describe('IntersectionType', () => {})
 
-describe('Type', () => {
-
-})
+describe('Type', () => {})
