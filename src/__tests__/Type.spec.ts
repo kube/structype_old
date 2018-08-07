@@ -9,8 +9,8 @@
       ## ## ##*/
 
 import 'jest'
-import { StaticCheck, IsSameStaticType } from './__helpers';
-import { TypeFromTypeProps, Type } from './Type';
+import { StaticCheck, IsSameStaticType } from './__helpers'
+import { TypeFromTypeProps, Type } from '../Type'
 
 // Static-only checks
 describe('TypeFromTypeProps', () => {
@@ -37,8 +37,8 @@ describe('TypeFromTypeProps', () => {
   })
 
   it('handles object description', () => {
-    type Animal = TypeFromTypeProps<{ age: number, color: string }>
-    type Expected = { age: number, color: string }
+    type Animal = TypeFromTypeProps<{ age: number; color: string }>
+    type Expected = { age: number; color: string }
 
     StaticCheck<IsSameStaticType<Animal['kind'], 'object'>>()
     StaticCheck<IsSameStaticType<Animal['type'], Expected>>()
@@ -58,7 +58,7 @@ describe('ObjectType', () => {
   it('returns an object kind', () => {
     const Paco = Type({ firstName: Type('Paco'), lastName: 'de Lucia' })
     // type Paco = typeof Paco.type
-    // expect(Paco.kind).toBe('object')
+    expect(Paco.kind).toBe('object')
   })
 })
 
