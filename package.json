@@ -4,7 +4,8 @@
   "main": "lib/index.js",
   "license": "MIT",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "tsc"
   },
   "devDependencies": {
     "@types/jest": "^23.1.5",

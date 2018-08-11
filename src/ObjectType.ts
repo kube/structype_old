@@ -15,9 +15,13 @@ import { Type, TypeProps, StaticTypeFromTypeProps } from './Type'
  * Object Type Creator.
  */
 export type ObjectDescription = {
-  // TypeProps can't be used as Primitive won't be infered as literal.
+  // TypeProps can't be used, as Primitive won't be infered as literal.
   // https://github.com/Microsoft/TypeScript/issues/26158
   [key: string]: TypeProps
+}
+
+export type StaticTypeFromObjectDescription<P extends ObjectDescription> = {
+  [K in keyof P]: StaticTypeFromTypeProps<P[K]>
 }
 
 export interface ObjectType<D extends ObjectDescription>

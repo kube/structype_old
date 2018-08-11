@@ -43,6 +43,14 @@ describe('TypeFromTypeProps', () => {
     StaticCheck<IsSameStaticType<Animal['kind'], 'object'>>()
     StaticCheck<IsSameStaticType<Animal['type'], Expected>>()
   })
+
+  it('handles object description with Primitive constructor', () => {
+    type Animal = TypeFromTypeProps<{ age: NumberConstructor; color: StringConstructor }>
+    type Expected = { age: number; color: string }
+
+    StaticCheck<IsSameStaticType<Animal['kind'], 'object'>>()
+    StaticCheck<IsSameStaticType<Animal['type'], Expected>>()
+  })
 })
 
 describe('RegexType', () => {})
@@ -59,6 +67,24 @@ describe('ObjectType', () => {
     const Paco = Type({ firstName: Type('Paco'), lastName: 'de Lucia' })
     // type Paco = typeof Paco.type
     expect(Paco.kind).toBe('object')
+  })
+})
+
+describe('PrimitiveType', () => {
+  it('works', () => {
+    const SomeString = Type(String)
+    type SomeString = typeof SomeString.type
+    StaticCheck<IsSameStaticType<SomeString, string>>()
+  })
+
+  it('works', () => {
+    const Animal = Type({
+      name: String,
+      age: Number
+    })
+    type Animal = typeof Animal.type
+    type Expected = { name: string, age: number }
+    StaticCheck<IsSameStaticType<Expected, Animal>>()
   })
 })
 
