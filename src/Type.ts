@@ -95,4 +95,6 @@ export function Type(x: TypeProps) {
   )
 }
 
-export const isType = (x: any): x is Type => x && x[STRUCTYPE_FLAG] === true
+export function isType (x: any): x is Type {
+  return x && x[STRUCTYPE_FLAG] === true
+}
