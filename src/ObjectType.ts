@@ -11,9 +11,6 @@
 import { GenericType } from './GenericType'
 import { Type, TypeProps, StaticTypeFromTypeProps } from './Type'
 
-/**
- * Object Type Creator.
- */
 export type ObjectDescription = {
   // TypeProps can't be used, as Primitive won't be infered as literal.
   // https://github.com/Microsoft/TypeScript/issues/26158
@@ -35,6 +32,9 @@ export function ObjectType<D extends ObjectDescription>(
   description: D
 ): ObjectType<D>
 
+/**
+ * Object Type Creator.
+ */
 export function ObjectType(description: ObjectDescription): ObjectType<any> {
   const props: { [key: string]: Type } = {}
 

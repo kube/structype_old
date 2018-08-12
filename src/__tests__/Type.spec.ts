@@ -45,7 +45,10 @@ describe('TypeFromTypeProps', () => {
   })
 
   it('handles object description with Primitive constructor', () => {
-    type Animal = TypeFromTypeProps<{ age: NumberConstructor; color: StringConstructor }>
+    type Animal = TypeFromTypeProps<{
+      age: NumberConstructor
+      color: StringConstructor
+    }>
     type Expected = { age: number; color: string }
 
     StaticCheck<IsSameStaticType<Animal['kind'], 'object'>>()
@@ -64,7 +67,10 @@ describe('LiteralType', () => {
 
 describe('ObjectType', () => {
   it('returns an object kind', () => {
-    const Paco = Type({ firstName: Type('Paco'), lastName: 'de Lucia' })
+    const Paco = Type({
+      firstName: Type('Paco'),
+      lastName: 'de Lucia'
+    })
     // type Paco = typeof Paco.type
     expect(Paco.kind).toBe('object')
   })
@@ -79,12 +85,42 @@ describe('PrimitiveType', () => {
 
   it('works', () => {
     const Animal = Type({
-      name: String,
-      age: Number
+      sex: Type('Male').or('Female'),
+      name: Type(String).or(Number),
+      age: Number,
+      props: {
+        a: String,
+        b: Number
+      }
     })
     type Animal = typeof Animal.type
-    type Expected = { name: string, age: number }
+    type Expected = {
+      sex: 'Male' | 'Female'
+      name: string | number
+      age: number
+      props: {
+        a: string
+        b: number
+      }
+    }
     StaticCheck<IsSameStaticType<Expected, Animal>>()
+
+    expect(
+      Animal.test({
+        sex: 'Male',
+        name: 'Hello',
+        age: 42,
+        props: { a: 'Hello', b: 42 }
+      })
+    ).toBe(true)
+
+    expect(
+      Animal.test({
+        name: 42,
+        age: 42,
+        props: { a: 'Hello', b: 42 }
+      })
+    ).toBe(false)
   })
 })
 

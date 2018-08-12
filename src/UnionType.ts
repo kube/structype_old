@@ -16,9 +16,6 @@ import {
   StaticTypeFromTypeProps
 } from './Type'
 
-/**
- * Union Type Creator.
- */
 export interface UnionType<P1 extends TypeProps, P2 extends TypeProps>
   extends GenericType<
       'union',
@@ -29,6 +26,9 @@ export interface UnionType<P1 extends TypeProps, P2 extends TypeProps>
       }
     > {}
 
+/**
+ * Union Type Creator.
+ */
 export function UnionType<P1 extends TypeProps, P2 extends TypeProps>(
   leftTypeProps: P1,
   rightTypeProps: P2

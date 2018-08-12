@@ -16,8 +16,8 @@ export type PrimitiveConstructor =
   | StringConstructor
   | BooleanConstructor
 
-  export const isPrimitiveConstructor = (x: any): x is PrimitiveConstructor =>
-    x === String || x === Boolean || x === Number
+export const isPrimitiveConstructor = (x: any): x is PrimitiveConstructor =>
+  x === String || x === Boolean || x === Number
 
 export type IdentifierFromPrimitive<P extends Primitive> = P extends number
   ? 'number'

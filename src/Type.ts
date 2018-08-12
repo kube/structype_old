@@ -24,6 +24,7 @@ import {
   ObjectDescription,
   StaticTypeFromObjectDescription
 } from './ObjectType'
+import { Composable } from './Composable'
 
 export type StaticType = Primitive | { [key: string]: StaticType }
 
@@ -73,23 +74,25 @@ export type Type =
   | UnionType<any, any>
   | PrimitiveType<any>
 
-export function Type<P extends TypeProps>(props: P): TypeFromTypeProps<P>
+export function Type<P extends TypeProps>(
+  props: P
+): Composable<TypeFromTypeProps<P>>
 
 /**
  * Type Creator.
  */
-export function Type(x: TypeProps): Type {
-  if (isType(x)) {
-    return x
-  } else if (isPrimitiveConstructor(x)) {
-    return PrimitiveType(x)
-  } else if (isPrimitive(x)) {
-    return LiteralType(x)
-  } else if (x instanceof RegExp) {
-    return RegexType(x)
-  } else {
-    return ObjectType(x)
-  }
+export function Type(x: TypeProps) {
+  return Composable(
+    isType(x)
+      ? x
+      : isPrimitiveConstructor(x)
+        ? PrimitiveType(x)
+        : isPrimitive(x)
+          ? LiteralType(x)
+          : x instanceof RegExp
+            ? RegexType(x)
+            : ObjectType(x)
+  )
 }
 
 export const isType = (x: any): x is Type => x && x[STRUCTYPE_FLAG] === true
