@@ -8,7 +8,7 @@
      ## ## ## :##
       ## ## ##*/
 
-import { GenericType } from './GenericType'
+import { AbstractType } from './AbstractType'
 import { StaticType } from './Type'
 
 /**
@@ -20,4 +20,4 @@ import { StaticType } from './Type'
  * e.g. Integer, Positive, Odd numbers, etc...
  */
 export const BlackType = <T extends StaticType>(test: (x: any) => x is T) =>
-  GenericType('black', null, test)
+  AbstractType('black', null, { black: true }, test)

@@ -9,7 +9,7 @@
       ## ## ##*/
 
 import { Primitive, isPrimitive } from './Primitive'
-import { GenericType, STRUCTYPE_FLAG } from './GenericType'
+import { AbstractType, STRUCTYPE_FLAG } from './AbstractType'
 import { RegexType } from './RegexType'
 import { UnionType } from './UnionType'
 import { LiteralType } from './LiteralType'
@@ -29,9 +29,9 @@ import { Composable } from './Composable'
 export type StaticType = Primitive | { [key: string]: StaticType }
 
 /**
- * TypeProps
+ * TypeDescription
  */
-export type TypeProps =
+export type TypeDescription =
   | Type
   | RegExp
   | Primitive
@@ -39,32 +39,32 @@ export type TypeProps =
   | ObjectDescription
 
 /**
- * Type From TypeProps.
+ * Type From TypeDescription.
  */
-export type TypeFromTypeProps<P extends TypeProps> = P extends Type
-  ? P
-  : P extends PrimitiveConstructor
-    ? PrimitiveType<PrimitiveFromPrimitiveConstructor<P>>
-    : P extends Primitive
-      ? LiteralType<P>
-      : P extends RegExp
+export type TypeFromTypeDescription<D extends TypeDescription> = D extends Type
+  ? D
+  : D extends PrimitiveConstructor
+    ? PrimitiveType<PrimitiveFromPrimitiveConstructor<D>>
+    : D extends Primitive
+      ? LiteralType<D>
+      : D extends RegExp
         ? RegexType
-        : P extends ObjectDescription
-          ? ObjectType<StaticTypeFromObjectDescription<P>>
+        : D extends ObjectDescription
+          ? ObjectType<StaticTypeFromObjectDescription<D>>
           : never
 
-export type StaticTypeFromTypeProps<
-  P extends TypeProps
-> = P extends GenericType<any, infer T, any>
+export type StaticTypeFromTypeDescription<
+  D extends TypeDescription
+> = D extends AbstractType<any, infer T, any, any>
   ? T
-  : P extends PrimitiveConstructor
-    ? PrimitiveFromPrimitiveConstructor<P>
-    : P extends Primitive
-      ? P
-      : P extends RegExp
+  : D extends PrimitiveConstructor
+    ? PrimitiveFromPrimitiveConstructor<D>
+    : D extends Primitive
+      ? D
+      : D extends RegExp
         ? string
-        : P extends ObjectDescription
-          ? StaticTypeFromObjectDescription<P>
+        : D extends ObjectDescription
+          ? StaticTypeFromObjectDescription<D>
           : never
 
 export type Type =
@@ -74,14 +74,14 @@ export type Type =
   | UnionType<any, any>
   | PrimitiveType<any>
 
-export function Type<P extends TypeProps>(
-  props: P
-): Composable<TypeFromTypeProps<P>>
+export function Type<D extends TypeDescription>(
+  description: D
+): Composable<TypeFromTypeDescription<D>>
 
 /**
  * Type Creator.
  */
-export function Type(x: TypeProps) {
+export function Type(x: TypeDescription) {
   return Composable(
     isType(x)
       ? x

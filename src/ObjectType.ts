@@ -8,23 +8,22 @@
      ## ## ## :##
       ## ## ##*/
 
-import { GenericType } from './GenericType'
-import { Type, TypeProps, StaticTypeFromTypeProps } from './Type'
+import { AbstractType } from './AbstractType'
+import { Type, TypeDescription, StaticTypeFromTypeDescription } from './Type'
 
 export type ObjectDescription = {
-  // TypeProps can't be used, as Primitive won't be infered as literal.
-  // https://github.com/Microsoft/TypeScript/issues/26158
-  [key: string]: TypeProps
+  [key: string]: TypeDescription
 }
 
 export type StaticTypeFromObjectDescription<P extends ObjectDescription> = {
-  [K in keyof P]: StaticTypeFromTypeProps<P[K]>
+  [K in keyof P]: StaticTypeFromTypeDescription<P[K]>
 }
 
 export interface ObjectType<D extends ObjectDescription>
-  extends GenericType<
+  extends AbstractType<
       'object',
-      StaticTypeFromTypeProps<D>,
+      StaticTypeFromTypeDescription<D>,
+      {},
       { [key: string]: Type }
     > {}
 
@@ -36,20 +35,20 @@ export function ObjectType<D extends ObjectDescription>(
  * Object Type Creator.
  */
 export function ObjectType(description: ObjectDescription): ObjectType<any> {
-  const props: { [key: string]: Type } = {}
+  const properties: { [key: string]: Type } = {}
 
   for (const key in description) {
-    props[key] = Type(description[key])
+    properties[key] = Type(description[key])
   }
 
   const test = (x: { [key: string]: any }): x is any => {
-    for (const key in props) {
-      if (!props[key].test(x[key])) {
+    for (const key in properties) {
+      if (!properties[key].test(x[key])) {
         return false
       }
     }
     return true
   }
 
-  return GenericType('object', props, test)
+  return AbstractType('object', properties, {}, test)
 }

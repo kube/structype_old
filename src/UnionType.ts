@@ -8,41 +8,43 @@
      ## ## ## :##
       ## ## ##*/
 
-import { GenericType } from './GenericType'
+import { AbstractType } from './AbstractType'
 import {
   Type,
-  TypeProps,
-  TypeFromTypeProps,
-  StaticTypeFromTypeProps
+  TypeDescription,
+  TypeFromTypeDescription,
+  StaticTypeFromTypeDescription
 } from './Type'
 
-export interface UnionType<P1 extends TypeProps, P2 extends TypeProps>
-  extends GenericType<
+export interface UnionType<P1 extends TypeDescription, P2 extends TypeDescription>
+  extends AbstractType<
       'union',
-      StaticTypeFromTypeProps<P1> | StaticTypeFromTypeProps<P2>,
+      StaticTypeFromTypeDescription<P1> | StaticTypeFromTypeDescription<P2>,
+      {},
       {
-        left: TypeFromTypeProps<P1>
-        right: TypeFromTypeProps<P2>
+        left: TypeFromTypeDescription<P1>
+        right: TypeFromTypeDescription<P2>
       }
     > {}
 
 /**
  * Union Type Creator.
  */
-export function UnionType<P1 extends TypeProps, P2 extends TypeProps>(
-  leftTypeProps: P1,
-  rightTypeProps: P2
+export function UnionType<P1 extends TypeDescription, P2 extends TypeDescription>(
+  leftTypeDescription: P1,
+  rightTypeDescription: P2
 ): UnionType<P1, P2> {
-  // Create Types from TypeProps
-  const leftType = Type(leftTypeProps)
-  const rightType = Type(rightTypeProps)
+  // Create Types from TypeDescription
+  const leftType = Type(leftTypeDescription)
+  const rightType = Type(rightTypeDescription)
 
-  return GenericType(
+  return AbstractType(
     'union',
     {
       left: leftType,
       right: rightType
     },
+    {},
     (x: any): x is any => {
       return leftType.test(x) || rightType.test(x)
     }

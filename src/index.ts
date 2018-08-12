@@ -8,24 +8,10 @@
      ## ## ## :##
       ## ## ##*/
 
-import { Type as _Type } from './Type'
-import { assign } from './assign'
+import { Type } from './Type'
 
-const Type = assign(_Type, {
+// Expose API on default export for conciseness in usage
+export default Object.assign(Type, {
   Optional: () => console.log('OPTIONAL'),
   SayHello: () => console.log('Hello')
 })
-
-/////////
-
-export const Animal = Type({
-  name: Type(String).or(Number),
-  hello: Number
-})
-
-let obj: any
-if (Animal.test(obj)) {
-  console.log(obj.hello)
-}
-
-Type.Optional()

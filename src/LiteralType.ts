@@ -9,17 +9,18 @@
       ## ## ##*/
 
 import { Primitive } from './Primitive'
-import { GenericType } from './GenericType'
+import { AbstractType } from './AbstractType'
 
 /**
  * Literal Type Creator.
  */
-export type LiteralType<L extends Primitive> = GenericType<'literal', L, L>
+export type LiteralType<L extends Primitive> = AbstractType<'literal', L, { literal: true }, L>
 
 export const LiteralType = <L extends Primitive>(literal: L): LiteralType<L> =>
-  GenericType(
+  AbstractType(
     'literal',
     literal,
+    { literal: true },
     (x: any): x is L => {
       return x === literal
     }

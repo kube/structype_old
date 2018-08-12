@@ -9,7 +9,7 @@
       ## ## ##*/
 
 import { Primitive } from './Primitive'
-import { GenericType } from './GenericType'
+import { AbstractType } from './AbstractType'
 
 export type PrimitiveConstructor =
   | NumberConstructor
@@ -32,18 +32,19 @@ export type PrimitiveFromPrimitiveConstructor<
 //TODO: RENAME!
 
 export function identifierFromPrimitiveConstructor<
-  P extends PrimitiveConstructor
->(p: P): IdentifierFromPrimitive<PrimitiveFromPrimitiveConstructor<P>>
+  C extends PrimitiveConstructor
+>(constructor: C): IdentifierFromPrimitive<PrimitiveFromPrimitiveConstructor<C>>
 
 export function identifierFromPrimitiveConstructor<
-  P extends PrimitiveConstructor
->(p: P) {
-  return p === Number ? 'number' : p === String ? 'string' : 'boolean'
+  C extends PrimitiveConstructor
+>(c: C) {
+  return c === Number ? 'number' : c === String ? 'string' : 'boolean'
 }
 
-export type PrimitiveType<P extends Primitive> = GenericType<
+export type PrimitiveType<P extends Primitive> = AbstractType<
   'primitive',
   P,
+  {},
   IdentifierFromPrimitive<P>
 >
 
@@ -55,9 +56,10 @@ export const PrimitiveType = <C extends PrimitiveConstructor>(
 ): PrimitiveType<PrimitiveFromPrimitiveConstructor<C>> => {
   const identifier = identifierFromPrimitiveConstructor(constructor)
 
-  return GenericType(
+  return AbstractType(
     'primitive',
     identifier,
+    {},
     (x: any): x is PrimitiveFromPrimitiveConstructor<C> => {
       return typeof x === identifier
     }

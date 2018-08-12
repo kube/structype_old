@@ -8,17 +8,18 @@
      ## ## ## :##
       ## ## ##*/
 
-import { GenericType } from './GenericType'
+import { AbstractType } from './AbstractType'
 
 /**
  * Regex Type Creator.
  */
-export type RegexType = GenericType<'regex', string, RegExp>
+export type RegexType = AbstractType<'regex', string, { black: true }, RegExp>
 
 export const RegexType = (regex: RegExp): RegexType =>
-  GenericType(
+  AbstractType(
     'regex',
     regex,
+    { black: true },
     (x: any): x is string => {
       return typeof x === 'string' && regex.test(x)
     }

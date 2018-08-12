@@ -8,18 +8,19 @@
      ## ## ## :##
       ## ## ##*/
 
-import { GenericType } from './GenericType'
-import { TypeProps, TypeFromTypeProps, StaticTypeFromTypeProps } from './Type'
+import { AbstractType } from './AbstractType'
+import { TypeDescription, TypeFromTypeDescription, StaticTypeFromTypeDescription } from './Type'
 
 /**
  * Intersection Type Creator.
  */
-export interface IntersectionType<P1 extends TypeProps, P2 extends TypeProps>
-  extends GenericType<
+export interface IntersectionType<P1 extends TypeDescription, P2 extends TypeDescription>
+  extends AbstractType<
       'intersection',
-      StaticTypeFromTypeProps<P1> & StaticTypeFromTypeProps<P2>,
+      StaticTypeFromTypeDescription<P1> & StaticTypeFromTypeDescription<P2>,
+      {},
       {
-        left: TypeFromTypeProps<P1>
-        right: TypeFromTypeProps<P2>
+        left: TypeFromTypeDescription<P1>
+        right: TypeFromTypeDescription<P2>
       }
     > {}
