@@ -9,39 +9,56 @@
       ## ## ##*/
 
 import 'jest'
-import { StaticCheck, IsSameStaticType } from './__helpers'
+import { Assert, IsSameStaticType } from './__helpers'
 import { TypeFromTypeDescription, Type } from '../Type'
+import { OptionalType, IsOptionalType } from '../Optional'
+
+describe('OptionalType', () => {
+  it('works statically', () => {
+    const Person = Type({
+      name: String
+    })
+    type PersonType = typeof Person
+
+    type OptionalPersonType = OptionalType<PersonType>
+    Assert.False<IsOptionalType<PersonType>>()
+    Assert.True<IsOptionalType<OptionalPersonType>>()
+
+    type Person = PersonType['type']
+    type OptionalPerson = OptionalPersonType['type']
+  })
+})
 
 // Static-only checks
 describe('TypeFromTypeProps', () => {
   it('handles string literal', () => {
     type Hello = TypeFromTypeDescription<'Hello'>
-    StaticCheck<IsSameStaticType<Hello['kind'], 'literal'>>()
-    StaticCheck<IsSameStaticType<Hello['type'], 'Hello'>>()
+    Assert.True<IsSameStaticType<Hello['kind'], 'literal'>>()
+    Assert.True<IsSameStaticType<Hello['type'], 'Hello'>>()
   })
 
   it('handles number literal', () => {
     type FortyTwo = TypeFromTypeDescription<42>
-    StaticCheck<IsSameStaticType<FortyTwo['kind'], 'literal'>>()
-    StaticCheck<IsSameStaticType<FortyTwo['type'], 42>>()
+    Assert.True<IsSameStaticType<FortyTwo['kind'], 'literal'>>()
+    Assert.True<IsSameStaticType<FortyTwo['type'], 42>>()
   })
 
   it('handles boolean literal', () => {
     type True = TypeFromTypeDescription<true>
-    StaticCheck<IsSameStaticType<True['kind'], 'literal'>>()
-    StaticCheck<IsSameStaticType<True['type'], true>>()
+    Assert.True<IsSameStaticType<True['kind'], 'literal'>>()
+    Assert.True<IsSameStaticType<True['type'], true>>()
 
     type False = TypeFromTypeDescription<false>
-    StaticCheck<IsSameStaticType<False['kind'], 'literal'>>()
-    StaticCheck<IsSameStaticType<False['type'], false>>()
+    Assert.True<IsSameStaticType<False['kind'], 'literal'>>()
+    Assert.True<IsSameStaticType<False['type'], false>>()
   })
 
   it('handles object description', () => {
     type Animal = TypeFromTypeDescription<{ age: number; color: string }>
     type Expected = { age: number; color: string }
 
-    StaticCheck<IsSameStaticType<Animal['kind'], 'object'>>()
-    StaticCheck<IsSameStaticType<Animal['type'], Expected>>()
+    Assert.True<IsSameStaticType<Animal['kind'], 'object'>>()
+    Assert.True<IsSameStaticType<Animal['type'], Expected>>()
   })
 
   it('handles object description with Primitive constructor', () => {
@@ -51,8 +68,8 @@ describe('TypeFromTypeProps', () => {
     }>
     type Expected = { age: number; color: string }
 
-    StaticCheck<IsSameStaticType<Animal['kind'], 'object'>>()
-    StaticCheck<IsSameStaticType<Animal['type'], Expected>>()
+    Assert.True<IsSameStaticType<Animal['kind'], 'object'>>()
+    Assert.True<IsSameStaticType<Animal['type'], Expected>>()
   })
 })
 
@@ -80,7 +97,7 @@ describe('PrimitiveType', () => {
   it('works', () => {
     const SomeString = Type(String)
     type SomeString = typeof SomeString.type
-    StaticCheck<IsSameStaticType<SomeString, string>>()
+    Assert.True<IsSameStaticType<SomeString, string>>()
   })
 
   it('works', () => {
@@ -103,7 +120,7 @@ describe('PrimitiveType', () => {
         b: number
       }
     }
-    StaticCheck<IsSameStaticType<Expected, Animal>>()
+    Assert.True<IsSameStaticType<Expected, Animal>>()
 
     expect(
       Animal.test({
