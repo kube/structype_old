@@ -21,7 +21,5 @@ export const LiteralType = <L extends Primitive>(literal: L): LiteralType<L> =>
     'literal',
     literal,
     { literal: true },
-    (x: any): x is L => {
-      return x === literal
-    }
+    (x: any): x is L => x === literal
   )

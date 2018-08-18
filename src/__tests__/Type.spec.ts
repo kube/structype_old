@@ -1,31 +1,63 @@
-
-      /*#######.
+/*#######.
      ########",#:
    #########',##".
   ##'##'## .##',##.
    ## ## ## # ##",#.
     ## ## ## ## ##'
-     ## ## ## :##
-      ## ## ##*/
+    ## ## ## :##
+    ## ## ##*/
 
 import 'jest'
 import { Assert, IsSameStaticType } from './__helpers'
 import { TypeFromTypeDescription, Type } from '../Type'
-import { OptionalType, IsOptionalType } from '../Optional'
+import { OptionalType, Optional, IsOptionalType } from '../Optional'
 
 describe('OptionalType', () => {
   it('works statically', () => {
-    const Person = Type({
-      name: String
-    })
-    type PersonType = typeof Person
+    const Person = Type({ name: String })
 
+    type PersonType = typeof Person
     type OptionalPersonType = OptionalType<PersonType>
+
     Assert.False<IsOptionalType<PersonType>>()
     Assert.True<IsOptionalType<OptionalPersonType>>()
 
     type Person = PersonType['type']
     type OptionalPerson = OptionalPersonType['type']
+
+    Assert.True<IsSameStaticType<Person, OptionalPerson>>()
+  })
+
+  it('works with runtime function', () => {
+    const Person = Type({ name: String })
+    const OptionalPerson = Optional({ name: String })
+
+    type Person = typeof Person.type
+    type OptionalPerson = typeof OptionalPerson.type
+    type Expected = { name: string }
+
+    Assert.True<IsSameStaticType<Expected, Person>>()
+    Assert.True<IsSameStaticType<Expected, OptionalPerson>>()
+    Assert.True<IsSameStaticType<Person, OptionalPerson>>()
+  })
+
+  it('works on objects', () => {
+    const Person = Type({
+      name: String,
+      lastName: String,
+      age: Number,
+      surname: Optional(String).or(undefined)
+    })
+
+    type Person = typeof Person.type
+    type Expected = {
+      name: string
+      lastName: string
+      age: number
+      surname?: string
+    }
+
+    Assert.True<IsSameStaticType<Expected, Person>>()
   })
 })
 
