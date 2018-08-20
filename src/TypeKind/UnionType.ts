@@ -8,13 +8,13 @@
      ## ## ## :##
       ## ## ##*/
 
-import { AbstractType } from './AbstractType'
+import { AbstractType } from '../AbstractType'
 import {
   Type,
   TypeDescription,
   TypeFromTypeDescription,
   StaticTypeFromTypeDescription
-} from './Type'
+} from '../Type'
 
 export interface UnionType<P1 extends TypeDescription, P2 extends TypeDescription>
   extends AbstractType<

@@ -9,7 +9,7 @@
       ## ## ##*/
 
 import { Type, TypeDescription, TypeFromTypeDescription } from './Type'
-import { UnionType } from './UnionType'
+import { UnionType } from './TypeKind/UnionType'
 
 export type Composable<T extends Type> = T & {
   or: <R extends TypeDescription>(

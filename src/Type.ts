@@ -8,10 +8,9 @@
      ## ## ## :##
       ## ## ##*/
 
-import { Primitive, isPrimitive } from './Primitive'
 import { AbstractType, STRUCTYPE_FLAG } from './AbstractType'
 import { RegexType } from './TypeKind/RegexType'
-import { UnionType } from './UnionType'
+import { UnionType } from './TypeKind/UnionType'
 import { LiteralType } from './TypeKind/LiteralType'
 import {
   PrimitiveType,
@@ -27,6 +26,14 @@ import {
 import { Composable } from './Composable'
 
 export type StaticType = Primitive | { [key: string]: StaticType }
+
+/**
+ * Primitive.
+ */
+export type Primitive = string | number | boolean
+
+export const isPrimitive = (x: any): x is Primitive =>
+  typeof x === 'string' || typeof x === 'number' || typeof x === 'boolean'
 
 /**
  * TypeDescription
