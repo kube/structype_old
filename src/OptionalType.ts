@@ -21,10 +21,10 @@ export const setOptional = <T extends AbstractType>(type: T) => {
   return type as OptionalType<T>
 }
 
-export function Optional<D extends TypeDescription>(
+export function OptionalType<D extends TypeDescription>(
   description: D
 ): OptionalType<Composable<TypeFromTypeDescription<D>>>
 
-export function Optional(description: TypeDescription) {
+export function OptionalType(description: TypeDescription) {
   return setOptional(Type(description)) as any
 }

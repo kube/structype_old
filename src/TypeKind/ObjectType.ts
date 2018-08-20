@@ -10,7 +10,7 @@
 
 import { AbstractType } from '../AbstractType'
 import { Type, TypeDescription, StaticTypeFromTypeDescription } from '../Type'
-import { OptionalType } from '../Optional'
+import { OptionalType } from '../OptionalType'
 
 export interface ObjectDescription {
   [key: string]: TypeDescription

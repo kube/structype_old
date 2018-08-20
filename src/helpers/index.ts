@@ -24,7 +24,7 @@ export type IsSameStaticType<T, S> = [S] extends [T]
  * //TODO: UPDATE DESCRIPTION
  * Helper to easily check static types.
  */
-export const Assert = {
-  True: <_T extends true>() => {},
-  False: <_T extends false>() => {}
-}
+export function Assert<
+  _Expected extends boolean,
+  _Expression extends _Expected
+>() {}
