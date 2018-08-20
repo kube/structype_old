@@ -10,20 +10,20 @@
 
 import { Primitive, isPrimitive } from './Primitive'
 import { AbstractType, STRUCTYPE_FLAG } from './AbstractType'
-import { RegexType } from './RegexType'
+import { RegexType } from './TypeKind/RegexType'
 import { UnionType } from './UnionType'
-import { LiteralType } from './LiteralType'
+import { LiteralType } from './TypeKind/LiteralType'
 import {
   PrimitiveType,
   PrimitiveConstructor,
   PrimitiveFromPrimitiveConstructor,
   isPrimitiveConstructor
-} from './PrimitiveType'
+} from './TypeKind/PrimitiveType'
 import {
   ObjectType,
   ObjectDescription,
   StaticTypeFromObjectDescription
-} from './ObjectType'
+} from './TypeKind/ObjectType'
 import { Composable } from './Composable'
 
 export type StaticType = Primitive | { [key: string]: StaticType }

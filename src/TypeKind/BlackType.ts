@@ -8,8 +8,8 @@
      ## ## ## :##
       ## ## ##*/
 
-import { AbstractType } from './AbstractType'
-import { StaticType } from './Type'
+import { AbstractType } from '../AbstractType'
+import { StaticType } from '../Type'
 
 /**
  * Blackbox Type Creator.

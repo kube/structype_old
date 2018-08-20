@@ -8,8 +8,8 @@
      ## ## ## :##
       ## ## ##*/
 
-import { Primitive } from './Primitive'
-import { AbstractType } from './AbstractType'
+import { Primitive } from '../Primitive'
+import { AbstractType } from '../AbstractType'
 
 /**
  * Literal Type Creator.

@@ -8,8 +8,8 @@
      ## ## ## :##
       ## ## ##*/
 
-import { AbstractType } from './AbstractType'
-import { TypeDescription, TypeFromTypeDescription, StaticTypeFromTypeDescription } from './Type'
+import { AbstractType } from '../AbstractType'
+import { TypeDescription, TypeFromTypeDescription, StaticTypeFromTypeDescription } from '../Type'
 
 /**
  * Intersection Type Creator.

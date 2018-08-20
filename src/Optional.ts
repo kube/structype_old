@@ -10,25 +10,21 @@
 
 import { TypeDescription, Type, TypeFromTypeDescription } from './Type'
 import { AbstractType } from './AbstractType'
+import { Composable } from './Composable'
 
-export type IsOptionalType<
-  T extends AbstractType<any, any, any, any>
-> = T['flags'] extends { optional: true } ? true : false
-
-export type OptionalType<T extends AbstractType<any, any, any, any>> = T & {
-  flags: {
-    optional: true
-  }
+export type OptionalType<T extends AbstractType = AbstractType> = T & {
+  flags: { optional: true }
 }
 
-export const setOptional = <T extends AbstractType<any, any, any, any>>(
-  type: T
-): OptionalType<T> => {
+export const setOptional = <T extends AbstractType>(type: T) => {
   type.flags.optional = true
-  return type
+  return type as OptionalType<T>
 }
 
-export const Optional = <D extends TypeDescription>(
-  description: TypeDescription
-): OptionalType<TypeFromTypeDescription<D>> =>
-  setOptional(Type(description)) as any
+export function Optional<D extends TypeDescription>(
+  description: D
+): OptionalType<Composable<TypeFromTypeDescription<D>>>
+
+export function Optional(description: TypeDescription) {
+  return setOptional(Type(description)) as any
+}

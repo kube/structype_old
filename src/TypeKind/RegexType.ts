@@ -8,7 +8,7 @@
      ## ## ## :##
       ## ## ##*/
 
-import { AbstractType } from './AbstractType'
+import { AbstractType } from '../AbstractType'
 
 /**
  * Regex Type Creator.

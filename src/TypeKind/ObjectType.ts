@@ -1,4 +1,5 @@
-/*#######.
+
+      /*#######.
      ########",#:
    #########',##".
   ##'##'## .##',##.
@@ -7,28 +8,36 @@
      ## ## ## :##
       ## ## ##*/
 
-import { AbstractType } from './AbstractType'
-import { Type, TypeDescription, StaticTypeFromTypeDescription } from './Type'
-import { IsOptionalType } from './Optional'
+import { AbstractType } from '../AbstractType'
+import { Type, TypeDescription, StaticTypeFromTypeDescription } from '../Type'
+import { OptionalType } from '../Optional'
 
-export type ObjectDescription = {
+export interface ObjectDescription {
   [key: string]: TypeDescription
 }
 
-export type StaticTypeFromObjectDescription<P extends ObjectDescription> = {
-  [K in OptionalTypePropertiesNames<P>]: StaticTypeFromTypeDescription<P[K]>
+// export type StaticTypeFromObjectDescription<P extends ObjectDescription> = {
+//   [K in keyof P]: StaticTypeFromTypeDescription<P[K]>
+// }
+
+// export type StaticTypeFromObjectDescription<P extends {}> = RequiredTypeProperties<P>
+
+// export type FilterProperties<Predicate extends (prop: any) => boolean>
+
+export type MapProperties<P extends {}> = {
+
 }
 
-export type OptionalTypePropertiesNames<T extends ObjectDescription> = {
-  [K in keyof T]: T[K] extends AbstractType<any, any, any, any>
-    ? IsOptionalType<T[K]> extends true ? K : never
-    : never
+export type StaticTypeFromObjectDescription<P extends { [key: string]: any }> = {
+  [K in OptionalTypeProperties<P>]: P[K]
+}
+
+export type OptionalTypeProperties<T extends {}> = {
+  [K in keyof T]: T[K] extends OptionalType ? K : never
 }[keyof T]
 
-export type NotOptionalTypePropertiesNames<T extends ObjectDescription> = {
-  [K in keyof T]: T[K] extends AbstractType<any, any, any, any>
-    ? IsOptionalType<T[K]> extends true ? never : K
-    : K
+export type RequiredTypeProperties<T extends {}> = {
+  [K in keyof T]: T[K] extends OptionalType ? never : K
 }[keyof T]
 
 export interface ObjectType<D extends ObjectDescription>

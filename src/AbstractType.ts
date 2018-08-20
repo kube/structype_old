@@ -18,7 +18,12 @@ export type TypeFlags = {
   literal?: boolean
 }
 
-export type AbstractType<K extends string, T extends StaticType, F extends TypeFlags, P> = {
+export type AbstractType<
+  K extends string = string,
+  T extends StaticType = StaticType,
+  F extends TypeFlags = TypeFlags,
+  P = any
+> = {
   [STRUCTYPE_FLAG]: true
   type: T
   kind: K
@@ -31,7 +36,12 @@ export type AbstractType<K extends string, T extends StaticType, F extends TypeF
  * Abstract Type Creator.
  * TODO: RENAME TO ABSTRACT TYPE.
  */
-export const AbstractType = <K extends string, T extends StaticType, F extends TypeFlags, P>(
+export const AbstractType = <
+  K extends string,
+  T extends StaticType,
+  F extends TypeFlags,
+  P
+>(
   kind: K,
   properties: P,
   flags: F,

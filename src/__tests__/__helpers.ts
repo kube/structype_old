@@ -8,6 +8,8 @@
      ## ## ## :##
       ## ## ##*/
 
+export type IsSubStaticType<T, S> = [S] extends [T] ? true : false
+
 /**
  * Helper to check that two types are equal.
  * Both types are wrapped in a tuple, as Unions
@@ -24,5 +26,5 @@ export type IsSameStaticType<T, S> = [S] extends [T]
  */
 export const Assert = {
   True: <_T extends true>() => {},
-  False: <_T extends false>() => {},
+  False: <_T extends false>() => {}
 }
